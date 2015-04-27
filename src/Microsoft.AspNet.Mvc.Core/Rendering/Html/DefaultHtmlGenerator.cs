@@ -1024,6 +1024,16 @@ namespace Microsoft.AspNet.Mvc.Rendering
                         attributeValue = useViewData ? EvalString(viewContext, fullName, format) : valueParameter;
                     }
 
+                    object typeAttributeValue = null;
+                    if (htmlAttributes != null && htmlAttributes.TryGetValue("type", out typeAttributeValue))
+                    {
+                        if (string.Equals(typeAttributeValue.ToString(), "file") ||
+                            string.Equals(typeAttributeValue.ToString(), "image"))
+                        {
+                            break;
+                        }
+                    }
+
                     tagBuilder.MergeAttribute("value", attributeValue, replaceExisting: isExplicitValue);
                     break;
             }

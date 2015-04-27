@@ -602,7 +602,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                     tagHelper.For.Name,
                     model,      // value
                     null,       // format
-                    null))      // htmlAttributes
+                    It.Is<Dictionary<string, object>>(m => m.ContainsKey("type"))))      // htmlAttributes
                 .Returns(tagBuilder)
                 .Verifiable();
 
@@ -697,13 +697,13 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
 
             var tagBuilder = new TagBuilder("input", new NullTestEncoder());
 
-            Dictionary<string, object> htmlAttributes = null;
+            var htmlAttributes = new Dictionary<string, object>
+            {
+                { "type", expectedType }
+            };
             if (string.Equals(dataTypeName, TemplateRenderer.IEnumerableOfIFormFileName))
             {
-                htmlAttributes = new Dictionary<string, object>
-                {
-                    { "multiple", "multiple" }
-                };
+                htmlAttributes["multiple"] = "multiple";
             }
             htmlGenerator
                 .Setup(mock => mock.GenerateTextBox(
@@ -782,7 +782,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                     tagHelper.For.Name,
                     null,                                   // value
                     expectedFormat,
-                    null))                                  // htmlAttributes
+                    expectedAttributes))                    // htmlAttributes
                 .Returns(tagBuilder)
                 .Verifiable();
 
